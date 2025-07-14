@@ -1,0 +1,30 @@
+local p = game:GetService("Players").LocalPlayer
+local k = {}
+
+local function h()
+    local n
+    n = hookmetamethod(game, "__namecall", function(s, ...)
+        if getnamecallmethod() == "Kick" and s == p then
+            local m = tostring(...)
+            if not k[m] then
+                k[m] = true
+            end
+            return
+        end
+        return n(s, ...)
+    end)
+
+    local f
+    f = hookfunction(p.Kick, function(s, ...)
+        if s == p then
+            local m = tostring(...)
+            if not k[m] then
+                k[m] = true
+            end
+            return
+        end
+        return f(s, ...)
+    end)
+end
+
+h()
