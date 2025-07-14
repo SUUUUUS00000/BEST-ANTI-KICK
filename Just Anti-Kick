@@ -1,0 +1,19 @@
+local Player = game:GetService("Players").LocalPlayer
+
+local function BlockKick()
+    local Namecall = hookmetamethod(game, "__namecall", function(self, ...)
+        if getnamecallmethod() == "Kick" and self == Player then
+            return nil
+        end
+        return Namecall(self, ...)
+    end)
+
+    local KickFunc = hookfunction(Player.Kick, function(self, ...)
+        if self == Player then
+            return nil
+        end
+        return KickFunc(self, ...)
+    end
+end
+
+BlockKick()
