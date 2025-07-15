@@ -1,46 +1,18 @@
 local p = game:GetService("Players").LocalPlayer
 local k = {}
 
-local function h()
-    local oldhmmi
-    oldhmmi = hookmetamethod(game, "__index", function(self, method)
-        if self == p and method:lower() == "kick" then
-            return nil
-        end
-        return oldhmmi(self, method)
-    end)
+local oldhmmnc
+oldhmmnc = hookmetamethod(game, "__namecall", function(self, ...)
+    if self == p and getnamecallmethod():lower() == "kick" then
+        return
+    end
+    return oldhmmnc(self, ...)
+end)
 
-    local n
-    n = hookmetamethod(game, "__namecall", function(s, ...)
-        if getnamecallmethod() == "Kick" and s == p then
-            local m = tostring(...)
-            if not k[m] then
-                k[m] = true
-            end
-            return
-        end
-        return n(s, ...)
-    end)
-
-    local oldhmmnc
-    oldhmmnc = hookmetamethod(game, "__namecall", function(self, ...)
-        if self == p and getnamecallmethod():lower() == "kick" then
-            return
-        end
-        return oldhmmnc(self, ...)
-    end)
-
-    local f
-    f = hookfunction(p.Kick, function(s, ...)
-        if s == p then
-            local m = tostring(...)
-            if not k[m] then
-                k[m] = true
-            end
-            return
-        end
-        return f(s, ...)
-    end)
-end
-
-h()
+local f
+f = hookfunction(p.Kick, function(s, ...)
+    if s == p then
+        return
+    end
+    return f(s, ...)
+end)
