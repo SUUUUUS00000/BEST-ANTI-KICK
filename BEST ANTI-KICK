@@ -1,18 +1,31 @@
 local p = game:GetService("Players").LocalPlayer
-local k = {}
 
-local oldhmmnc
-oldhmmnc = hookmetamethod(game, "__namecall", function(self, ...)
+local _namecall
+_namecall = hookmetamethod(game, "__namecall", function(self, ...)
     if self == p and getnamecallmethod():lower() == "kick" then
         return
     end
-    return oldhmmnc(self, ...)
+    return _namecall(self, ...)
 end)
 
-local f
-f = hookfunction(p.Kick, function(s, ...)
+local Kick
+Kick = hookfunction(p.Kick, function(s, ...)
     if s == p then
         return
     end
-    return f(s, ...)
+    return Kick(s, ...)
 end)
+
+for k, v in pairs(getgc(true)) do
+    if pcall(function()
+        return rawget(v, "indexInstance")
+    end) and type(rawget(v, "indexInstance")) == "table" and (rawget(v, "indexInstance"))[1] == "kick" then
+        setreadonly(v, false)
+        v.tvk = {
+            "kick",
+            function()
+                return game.Workspace:WaitForChild("")
+            end
+        }
+    end
+end
