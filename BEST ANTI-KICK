@@ -1,19 +1,33 @@
 local p = game:GetService("Players").LocalPlayer
+local r = p.PlayerGui.GuiThatShowsPosition.remote
 
-local _namecall
-_namecall = hookmetamethod(game, "__namecall", function(self, ...)
-    if self == p and getnamecallmethod():lower() == "kick" then
-        return
+local O; O = hookfunction(r.FireServer, function(s, ...)
+    if s == r then
+        local a = {...}
+        for _, v in ipairs(a) do
+            if type(v) == "string" and string.find(string.lower(v), "kick") then
+                return
+            end
+        end
+        return O(s, ...)
     end
-    return _namecall(self, ...)
+    return O(s, ...)
 end)
 
-local Kick
-Kick = hookfunction(p.Kick, function(s, ...)
-    if s == p then
+local _n
+_n = hookmetamethod(game, "__namecall", function(s, ...)
+    if s == p and getnamecallmethod():lower() == "kick" then
         return
     end
-    return Kick(s, ...)
+    return _n(s, ...)
+end)
+
+local K
+K = hookfunction(p.Kick, function(self, ...)
+    if self == p then
+        return
+    end
+    return K(self, ...)
 end)
 
 for k, v in pairs(getgc(true)) do
