@@ -1,3 +1,5 @@
+local p = game:GetService("Players").LocalPlayer
+
 local o
 o = hookfunction(Instance.new("RemoteEvent").FireServer, function(s, ...)
     local a = {...}
