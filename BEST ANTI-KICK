@@ -1,17 +1,12 @@
-local p = game:GetService("Players").LocalPlayer
-local r = p.PlayerGui.GuiThatShowsPosition.remote
-
-local O; O = hookfunction(r.FireServer, function(s, ...)
-    if s == r then
-        local a = {...}
-        for _, v in ipairs(a) do
-            if type(v) == "string" and string.find(string.lower(v), "kick") then
-                return
-            end
+local o
+o = hookfunction(Instance.new("RemoteEvent").FireServer, function(s, ...)
+    local a = {...}
+    for _, v in ipairs(a) do
+        if type(v) == "string" and string.find(string.lower(v), "kick") then
+            return
         end
-        return O(s, ...)
     end
-    return O(s, ...)
+    return o(s, ...)
 end)
 
 local _n
