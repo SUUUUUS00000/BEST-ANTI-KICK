@@ -35,7 +35,7 @@ for k, v in pairs(getgc(true)) do
         v.tvk = {
             "kick",
             function()
-                return game.Workspace:WaitForChild("")
+                return false
             end
         }
     end
