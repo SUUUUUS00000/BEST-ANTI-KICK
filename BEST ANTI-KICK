@@ -1,15 +1,15 @@
 local p = game:GetService("Players").LocalPlayer
 
-local AdonisRemotes = {}
+local R = {}
 
-local function isAdonisRemoteEvent(remoteEvent)
-    if AdonisRemotes[remoteEvent] then
+local function F(r)
+    if R[r] then
         return true
     end
 
-    local name = remoteEvent.Name
-    if #name == 36 and string.match(name, "^%x%x%x%x%x%x%x%x%-%x%x%x%x%-%x%x%x%x%-%x%x%x%x%-%x%x%x%x%x%x%x%x%x%x%x%x$") then
-        AdonisRemotes[remoteEvent] = true
+    local n = r.Name
+    if #n == 36 and string.match(n, "^%x%x%x%x%x%x%x%x%-%x%x%x%x%-%x%x%x%x%-%x%x%x%x%-%x%x%x%x%x%x%x%x%x%x%x%x$") then
+        R[r] = true
         return true
     end
 
@@ -18,13 +18,13 @@ end
 
 local o
 o = hookfunction(Instance.new("RemoteEvent").FireServer, function(s, ...)
-    local args = {...}
+    local a = {...}
     
-    if isAdonisRemoteEvent(s) then
+    if F(s) then
         return o(s, ...)
     end
     
-    for _, v in ipairs(args) do
+    for _, v in ipairs(a) do
         if type(v) == "string" and string.find(string.lower(v), "kick") then
             return
         end
@@ -33,23 +33,23 @@ o = hookfunction(Instance.new("RemoteEvent").FireServer, function(s, ...)
     return o(s, ...)
 end)
 
-local _n
-_n = hookmetamethod(game, "__namecall", function(s, ...)
+local n
+n = hookmetamethod(game, "__namecall", function(s, ...)
     if s == p and getnamecallmethod():lower() == "kick" then
         return
     end
-    return _n(s, ...)
+    return n(s, ...)
 end)
 
-local K
-K = hookfunction(p.Kick, function(self, ...)
-    if self == p then
+local k
+k = hookfunction(p.Kick, function(s, ...)
+    if s == p then
         return
     end
-    return K(self, ...)
+    return k(s, ...)
 end)
 
-for k, v in pairs(getgc(true)) do
+for i, v in pairs(getgc(true)) do
     if pcall(function()
         return rawget(v, "indexInstance")
     end) and type(rawget(v, "indexInstance")) == "table" and (rawget(v, "indexInstance"))[1] == "kick" then
