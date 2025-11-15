@@ -49,16 +49,33 @@ k = hookfunction(p.Kick, function(s, ...)
     return k(s, ...)
 end)
 
-for i, v in pairs(getgc(true)) do
-    if pcall(function()
-        return rawget(v, "indexInstance")
-    end) and type(rawget(v, "indexInstance")) == "table" and (rawget(v, "indexInstance"))[1] == "kick" then
-        setreadonly(v, false)
-        v.tvk = {
-            "kick",
-            function()
-                return false
+local hookedFunctions = {}
+task.spawn(function()
+    setthreadidentity(2)
+    for _, obj in getgc(true) do
+        if typeof(obj) == "table" then
+            local Detected = rawget(obj, "Detected")
+            local Kill = rawget(obj, "Kill") 
+            local Disconnect = rawget(obj, "Disconnect")
+            
+            if typeof(Detected) == "function" and not table.find(hookedFunctions, Detected) then
+                hookfunction(Detected, function(action, info, nocrash)
+                    if action ~= "_" then
+                    end
+                    return true
+                end)
+                table.insert(hookedFunctions, Detected)
             end
-        }
+            
+            if typeof(Kill) == "function" and not table.find(hookedFunctions, Kill) then
+                hookfunction(Kill, function(...) return end)
+                table.insert(hookedFunctions, Kill)
+            end
+            
+            if typeof(Disconnect) == "function" and not table.find(hookedFunctions, Disconnect) then
+                hookfunction(Disconnect, function(...) return end)
+                table.insert(hookedFunctions, Disconnect)
+            end
+        end
     end
-end
+end)
